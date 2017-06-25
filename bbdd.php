@@ -14,11 +14,12 @@ function desconectar($conexion) {
     mysqli_close($conexion);
 }
 
-//ISERTS
+//INSERTS
 
 function newUser($username, $password, $name, $surname, $type) {
     $conexion = conectar("msg");
-    $insert = "insert into user values('$username', '$password', '$name', '$surname', $type)";
+    $hash = password_hash($password, PASSWORD_DEFAULT);
+    $insert = "insert into user values('$username', '$hash', '$name', '$surname', $type)";
     if (mysqli_query($conexion, $insert)) {
         echo "Usuario dado de alta.<br>";
         header("refresh:3;url=index.php");
@@ -27,6 +28,16 @@ function newUser($username, $password, $name, $surname, $type) {
         header("refresh:3;url=registro.php");
     }
     desconectar($conexion);
+}
+function insertEvent($username, $type) {
+    $con = conectar("msg");
+    $insert = "insert into event values (null,'$username', now(),'$type')";
+    if (mysqli_query($con, $insert)) {
+        echo "<p>Evento registrado </p>";
+    } else {
+        echo mysqli_error($con);
+    }
+    desconectar($con);
 }
 
 //SELECTS
@@ -48,6 +59,16 @@ function validarPassword($username, $pass) {
         $fila = mysqli_fetch_array($result);
         extract($fila);
         return password_verify($pass, $password);
+    }
+}
+function comprobarUser($username) {
+    $con = conectar("msg");
+    $query = "select username from user where username='$username'";
+    $resultado = mysqli_query($con, $query);
+    desconectar($con);
+    $num_rows = mysqli_num_rows($resultado);
+    if ($num_rows == 0) {
+        return false;
     }
 }
 
