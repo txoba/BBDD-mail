@@ -8,9 +8,7 @@ if (isset($_SESSION["user"])) {
     $fila = mysqli_fetch_array($message);
     extract($fila);
     echo $body;
-    insertEvent($_SESSION["user"], 'C');
-    messageUpdate($idmensaje);
-    echo "<form action='mensajesRecibidos.php' method='post'>";
+    echo "<form action='mensajesEnviados.php' method='post'>";
     echo "<input type='submit' value='Volver'>";
     echo "</form>";
 } else {

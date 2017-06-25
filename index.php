@@ -33,7 +33,8 @@ if (isset($_POST["registrar"])) {
             header("refresh:1;url=home.php");
         }
     } else {
-        echo "<p>Usuario o contraseña incorrectos.</p>";
+        echo "<p>Usuario o password incorrectos.</p>";
+        header("refresh:1;url=index.php");
     }
 } else {
         echo 'REGISTRO:<br>

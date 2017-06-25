@@ -38,28 +38,27 @@ function newUserAdmin($username, $password, $name, $surname, $type) {
     $insert = "insert into user values('$username', '$password', '$name', '$surname', $type)";
     if (mysqli_query($conexion, $insert)) {
         echo "Usuario dado de alta.<br>";
-            header("refresh:1;url=index.php");
+            header("refresh:1;url=home.php");
     } else {
         echo mysqli_error($conexion);
-        echo "<form action='index.php' method='post'>";
+        echo "<form action='home.php' method='post'>";
             echo "<input type='submit' value='Volver'>";
             echo "</form>";
     }
     desconectar($conexion);
 }
-
 function insertEvent($username, $type) {
     $con = conectar("msg");
     $insert = "insert into event values (null,'$username', now(),'$type')";
     if (mysqli_query($con, $insert)) {
-        echo "Evento registrado";
     } else {
         echo mysqli_error($con);
-        header("refresh:1;url=registerUser.php");
+        echo "<form action='home.php' method='post'>";
+        echo "<input type='submit' value='Volver'>";
+        echo "</form>";
     }
     desconectar($con);
 }
-
 function insertMessage($sender, $reciver, $subject, $body) {
     $con = conectar("msg");
     $tipo = selectUser();
@@ -87,7 +86,13 @@ function selectUser() {
     desconectar($con);
     return $resultado;
 }
-
+function selectEventByUser($username) {
+    $conexion = conectar("msg");
+    $query = "select * from event where user='$username'";
+    $resultado = mysqli_query($conexion, $query);
+    desconectar($conexion);
+    return $resultado;
+}
 function validarPassword($username) {
     $conexion = conectar("msg");
     $query = "select password from user where username='$username'";
@@ -121,7 +126,20 @@ function selectMessage($posicion, $cantidad, $username) {
     desconectar($con);
     return $resultado;
 }
-
+function selectMessage2($posicion, $cantidad, $username) {
+    $con = conectar("msg");
+    $select = "select * from message where sender='$username' limit $posicion,$cantidad";
+    $resultado = mysqli_query($con, $select) or die(mysql_error());
+    desconectar($con);
+    return $resultado;
+}
+function selectMessageAll() {
+    $con = conectar("msg");
+    $select = "select * from message";
+    $resultado = mysqli_query($con, $select) or die(mysql_error());
+    desconectar($con);
+    return $resultado;
+}
 function selectMessageId($idmessage) {
     $con = conectar("msg");
     $select = "select body from message where idmessage='$idmessage'";
@@ -129,10 +147,27 @@ function selectMessageId($idmessage) {
     desconectar($con);
     return $resultado;
 }
-
 function contadorMensages($username) {
     $con = conectar("msg");
     $select = "select count(*) as count from message where receiver='$username'";
+    $resultado = mysqli_query($con, $select)or die(mysql_error());
+    $fila = mysqli_fetch_array($resultado);
+    extract($fila);
+    desconectar($con);
+    return $count;
+}
+function contadorMensages3($username) {
+    $con = conectar("msg");
+    $select = "select count(*) as count from message where sender='$username'";
+    $resultado = mysqli_query($con, $select)or die(mysql_error());
+    $fila = mysqli_fetch_array($resultado);
+    extract($fila);
+    desconectar($con);
+    return $count;
+}
+function contadorMensages2() {
+    $con = conectar("msg");
+    $select = "select count(*) as count from message";
     $resultado = mysqli_query($con, $select)or die(mysql_error());
     $fila = mysqli_fetch_array($resultado);
     extract($fila);

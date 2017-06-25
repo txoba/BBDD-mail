@@ -6,6 +6,7 @@ if (isset($_SESSION["user"])) {
         if (isset($_POST['borrar'])) {
             $user = $_POST["username"];
             deleteUser($user);
+            insertEvent($_SESSION["user"], 'X');
         } else {
             echo "<form action='' method='post'>";
             echo "Seleciona el usuario a eliminar: ";
@@ -16,7 +17,7 @@ if (isset($_SESSION["user"])) {
                 echo "<option value='$username'>$username</option>";
             }
             echo "</select>";
-            echo "<input type='submit' name='borrar' value='Borrar jugador'>";
+            echo "<input type='submit' name='borrar' value='Eliminar usuario'>";
             echo "</form>";
         }
     }else {

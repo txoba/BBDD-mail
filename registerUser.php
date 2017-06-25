@@ -1,6 +1,6 @@
 <?php
 
-require_once '../bbdd.php';
+require_once 'bbdd.php';
 session_start();
 if (isset($_SESSION["user"])) {
     if ($_SESSION["type"] == 1) {
