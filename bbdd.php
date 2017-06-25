@@ -21,11 +21,30 @@ function newUser($username, $password, $name, $surname, $type) {
     //$hash = password_hash($password, PASSWORD_DEFAULT);
     $insert = "insert into user values('$username', '$password', '$name', '$surname', $type)";
     if (mysqli_query($conexion, $insert)) {
-        echo "Usuario dado de alta.<br>";
-        header("refresh:3;url=index.php");
+        if ($type == 0) {
+            echo "Usuario dado de alta.<br>";
+            header("refresh:3;url=index.php");
+        } else if ($type == 1) {
+            echo "Administrador dado de alta.<br>";
+            header("refresh:3;url=index.php");
+        }
     } else {
         echo mysqli_error($conexion);
-        header("refresh:3;url=registro.php");
+        header("refresh:3;url=index.php");
+    }
+    desconectar($conexion);
+}
+
+function newUserAdmin($username, $password, $name, $surname, $type) {
+    $conexion = conectar("msg");
+    //$hash = password_hash($password, PASSWORD_DEFAULT);
+    $insert = "insert into user values('$username', '$password', '$name', '$surname', $type)";
+    if (mysqli_query($conexion, $insert)) {
+        echo "Usuario dado de alta.<br>";
+        header("refresh:1;url=home_admin.php");
+    } else {
+        echo mysqli_error($conexion);
+        header("refresh:1;url=registerUser.php");
     }
     desconectar($conexion);
 }
@@ -96,7 +115,7 @@ function deleteUser($name) {
             echo "<input type='submit' value='Volver a la home'>";
             echo "</form>";
         }
-    }else{
+    } else {
         echo mysqli_error($con);
     }
     desconectar($con);
