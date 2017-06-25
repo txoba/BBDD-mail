@@ -11,7 +11,7 @@ if (isset($_SESSION["user"])) {
                 <title></title>
             </head>
             <body>
-                <h1>HOME ADMIN</h1>
+                <h1>HOME ADMIN: <?php echo $_SESSION["user"]?></h1>
                 <a href="modificarPassword.php">Cambiar Password</a><br>
                 <a href="send.php">Enviar mensaje</a><br>
                 <a href="messages.php">Bandeja de entrada</a><br>
