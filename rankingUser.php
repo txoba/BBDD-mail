@@ -2,7 +2,7 @@
 require_once 'bbdd.php';
 echo "<form action='' method='post'>";
 echo'<table style="width:20%" border="1">';
-echo "<tr><th>Ganador</th><th>Victorias</th>";
+echo "<tr><th>Usuario</th><th>Cantidad mensajes enviados</th>";
 $msg = rankingMessages();
 while ($fila = mysqli_fetch_array($msg)) {
     extract($fila);
