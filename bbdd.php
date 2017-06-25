@@ -38,18 +38,32 @@ function selectUser() {
     desconectar($con);
     return $resultado;
 }
+function validarPassword($username, $pass) {
+    $conexion = conectar("msg");
+    $query = "select password from user where username='$username'";
+    $result = mysqli_query($conexion, $query);
+    $filas = mysqli_num_rows($result);
+    desconectar($conexion);
+    if ($filas > 0) {
+        $fila = mysqli_fetch_array($result);
+        extract($fila);
+        return password_verify($pass, $password);
+    }
+}
 
 // DELETE USER
 
 function deleteUser($name) {
-    $con = conectar("royal");
+    $con = conectar("msg");
     $delete = "delete from user where username='$name'";
     if (mysqli_query($con, $delete)) {
         echo "Usuario eliminado!";
         header("refresh:3;url=home_admin.php");
     } else {
         echo mysqli_error($con);
-        header("refresh:3;url=home_admin.php");
+        echo "<form action='/Admin/home_admin.php' method='post'>";
+            echo "<input type='submit' value='Volver a la home'>";
+            echo "</form>";
     }
     desconectar($con);
 }
@@ -58,7 +72,8 @@ function deleteUser($name) {
 
 function updatePassword($password, $usuario) {
     $con = conectar("msg");
-    $update = "update user set password='$password' where username='$usuario'";
+    $hash = password_hash($password, PASSWORD_DEFAULT);
+    $update = "update user set password='$hash' where username='$usuario'";
     if (mysqli_query($con, $update)) {
         echo "Password actualizada.";
         header("refresh:3;url=home.php");

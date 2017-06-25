@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'bbdd.php';
+require_once '../../bbdd.php';
 if (isset($_SESSION["username"])) {
     // Nos aseguramos que el usuario sea administrador
     // Cogemos el tipo de la variable de sesión
