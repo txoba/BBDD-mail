@@ -8,26 +8,29 @@ if (isset($_POST["registrar"])) {
     if (comprobarUser($usuario)) {
         echo "<p>Usuario ya extstente.</p>";
     } else {
-        $password = $_POST["pass1"];
-        if ($password != $_POST["pass2"]) {
+        $password1 = $_POST["pass1"];
+        if ($password1 != $_POST["pass2"]) {
             echo "<p>Las contraseñas no coinciden. </p>";
         } else {
-            newUser($usuario, $password, $nombre, $apellido, 0);
+            newUser($usuario, $password1, $nombre, $apellido, 0);
         }
     }
 } else if (isset($_POST["login"])) {
     $username = $_POST["username"];
-    $password = $_POST["password"];
-    if (validarPassword($username, $password)) {
+    $pass = $_POST["password"];
+    $verify = validarPassword($username);
+    $fila = mysqli_fetch_array($verify);
+    extract($fila);
+    if ($password == $pass) {
         insertEvent($username, "I");
         session_start();
         $_SESSION["user"] = $username;
-        $tipo = getTypeByUsername($username);
+        $tipo = selectType($username);
         $_SESSION["type"] = $tipo;
         if ($tipo == 0) {
-            header("Location: User/home.php");
+            header("refresh:1;url=User/home.php");
         } else if ($tipo == 1) {
-            header("Location: Admin/home_admin.php");
+            header("refresh:1;url=Admin/home_admin.php");
         }
     } else {
         echo "<p>Usuario o contraseña incorrectos.</p>";
@@ -40,18 +43,15 @@ if (isset($_POST["registrar"])) {
         Apellido: <input type = "text" name = "surname" required><br>
         Contrasenya: <input type = "password" name = "pass1" required><br>
         Repetir contrasenya: <input type = "password" name = "pass2" required><br>
-        <input type = "submit" name = "login" value = "Registrarse"><br>
+        <input type = "submit" name = "registrar" value = "Registrarse"><br>
         </form>';
+        
         echo 'INICIAR SESION:<br>
         <form action = "" method = "POST">
         Nombre de usuario: <input type = "text" name = "username" required><br>
         Contrasenya: <input type = "password" name = "password" required><br>
-        <input type = "submit" name = "registrar" value = "Registrarse"><br>
+        <input type = "submit" name = "login" value = "Iniciar Sesion"><br>
         </form>';
 }
 ?>
 
-<?php
-
-
-?>
