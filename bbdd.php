@@ -21,32 +21,33 @@ function newUser($username, $password, $name, $surname, $type) {
     //$hash = password_hash($password, PASSWORD_DEFAULT);
     $insert = "insert into user values('$username', '$password', '$name', '$surname', $type)";
     if (mysqli_query($conexion, $insert)) {
-        if ($type == 0) {
             echo "Usuario dado de alta.<br>";
-            header("refresh:3;url=index.php");
-        } else if ($type == 1) {
-            echo "Administrador dado de alta.<br>";
-            header("refresh:3;url=index.php");
-        }
+            header("refresh:1;url=index.php");
     } else {
         echo mysqli_error($conexion);
-        header("refresh:3;url=index.php");
+        echo "<form action='index.php' method='post'>";
+            echo "<input type='submit' value='Volver'>";
+            echo "</form>";
     }
     desconectar($conexion);
 }
+
 function newUserAdmin($username, $password, $name, $surname, $type) {
     $conexion = conectar("msg");
     //$hash = password_hash($password, PASSWORD_DEFAULT);
     $insert = "insert into user values('$username', '$password', '$name', '$surname', $type)";
     if (mysqli_query($conexion, $insert)) {
         echo "Usuario dado de alta.<br>";
-        header("refresh:1;url=home_admin.php");
+            header("refresh:1;url=index.php");
     } else {
         echo mysqli_error($conexion);
-        header("refresh:1;url=registerUser.php");
+        echo "<form action='index.php' method='post'>";
+            echo "<input type='submit' value='Volver'>";
+            echo "</form>";
     }
     desconectar($conexion);
 }
+
 function insertEvent($username, $type) {
     $con = conectar("msg");
     $insert = "insert into event values (null,'$username', now(),'$type')";
@@ -58,6 +59,7 @@ function insertEvent($username, $type) {
     }
     desconectar($con);
 }
+
 function insertMessage($sender, $reciver, $subject, $body) {
     $con = conectar("msg");
     $tipo = selectUser();
@@ -65,18 +67,13 @@ function insertMessage($sender, $reciver, $subject, $body) {
     extract($fila);
     $insert = "insert into message values (null,'$sender', '$reciver' , now() , 0 , '$subject', '$body')";
     if (mysqli_query($con, $insert)) {
-        if ($type == 0) {
             echo "Mensaje enviado.<br>";
-            header("refresh:3;url=User/home.php");
-        } else if ($type == 1) {
-            echo "Mensaje enviado.<br>";
-            header("refresh:3;url=Admin/home_admin.php");
-        }
+            header("refresh:1;url=home.php");
     } else {
         echo mysqli_error($con);
         echo "<form action='send.php' method='post'>";
-            echo "<input type='submit' value='Volver'>";
-            echo "</form>";
+        echo "<input type='submit' value='Volver'>";
+        echo "</form>";
     }
     desconectar($con);
 }
@@ -98,7 +95,6 @@ function validarPassword($username) {
     desconectar($conexion);
     return $resultado;
 }
-
 function comprobarUser($username) {
     $con = conectar("msg");
     $query = "select username from user where username='$username'";
@@ -109,7 +105,6 @@ function comprobarUser($username) {
         return false;
     }
 }
-
 function selectType($username) {
     $conexion = conectar("msg");
     $select = "select type from user where username='$username'";
@@ -118,6 +113,31 @@ function selectType($username) {
     extract($fila);
     desconectar($conexion);
     return $type;
+}
+function selectMessage($posicion, $cantidad, $username) {
+    $con = conectar("msg");
+    $select = "select * from message where receiver='$username' limit $posicion,$cantidad";
+    $resultado = mysqli_query($con, $select) or die(mysql_error());
+    desconectar($con);
+    return $resultado;
+}
+
+function selectMessageId($idmessage) {
+    $con = conectar("msg");
+    $select = "select body from message where idmessage='$idmessage'";
+    $resultado = mysqli_query($con, $select) or die(mysql_error());
+    desconectar($con);
+    return $resultado;
+}
+
+function contadorMensages($username) {
+    $con = conectar("msg");
+    $select = "select count(*) as count from message where receiver='$username'";
+    $resultado = mysqli_query($con, $select)or die(mysql_error());
+    $fila = mysqli_fetch_array($resultado);
+    extract($fila);
+    desconectar($con);
+    return $count;
 }
 
 // DELETE USER
@@ -129,10 +149,10 @@ function deleteUser($name) {
         $delete = "delete from user where username='$name'";
         if (mysqli_query($con, $delete)) {
             echo "Usuario eliminado!";
-            header("refresh:1;url=home_admin.php");
+            header("refresh:1;url=home.php");
         } else {
             echo mysqli_error($con);
-            echo "<form action='home_admin.php' method='post'>";
+            echo "<form action='home.php' method='post'>";
             echo "<input type='submit' value='Volver a la home'>";
             echo "</form>";
         }
@@ -150,10 +170,25 @@ function updatePassword($password, $usuario) {
     $update = "update user set password='$password' where username='$usuario'";
     if (mysqli_query($con, $update)) {
         echo "Password actualizada.";
-        header("refresh:3;url=home.php");
+        header("refresh:1;url=home.php");
     } else {
         echo mysqli_error($con);
-        header("refresh:3;url=home.php");
+        echo "<form action='home.php' method='post'>";
+        echo "<input type='submit' value='Volver a la home'>";
+        echo "</form>";
+    }
+    desconectar($con);
+}
+function messageUpdate($id) {
+    $con = conectar("msg");
+    $update = "update message set `read`=1 where idmessage=$id";
+    if (mysqli_query($con, $update)) {
+        
+    } else {
+        echo mysqli_error($con);
+        echo "<form action='home.php' method='post'>";
+        echo "<input type='submit' value='Volver a la home'>";
+        echo "</form>";
     }
     desconectar($con);
 }

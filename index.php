@@ -1,6 +1,6 @@
 <?php
 
-require_once './bbdd.php';
+require_once 'bbdd.php';
 if (isset($_POST["registrar"])) {
     $usuario = $_POST["username"];
     $nombre = $_POST["name"];
@@ -28,9 +28,9 @@ if (isset($_POST["registrar"])) {
         $tipo = selectType($username);
         $_SESSION["type"] = $tipo;
         if ($tipo == 0) {
-            header("refresh:1;url=User/home.php");
+            header("refresh:1;url=home.php");
         } else if ($tipo == 1) {
-            header("refresh:1;url=Admin/home_admin.php");
+            header("refresh:1;url=home.php");
         }
     } else {
         echo "<p>Usuario o contraseña incorrectos.</p>";

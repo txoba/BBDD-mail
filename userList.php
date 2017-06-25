@@ -1,6 +1,6 @@
 <?php
 
-require_once '../bbdd.php';
+require_once 'bbdd.php';
 session_start();
 if (isset($_SESSION["user"])) {
     if ($_SESSION["type"] == 1) {
@@ -16,7 +16,7 @@ if (isset($_SESSION["user"])) {
         }
         echo'</table>';
         echo "</form>";
-        echo "<form action='home_admin.php' method='post'>";
+        echo "<form action='home.php' method='post'>";
         echo "<input type='submit' value='Volver a la home'>";
         echo "</form>";
     } else {
