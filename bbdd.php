@@ -174,6 +174,13 @@ function contadorMensages2() {
     desconectar($con);
     return $count;
 }
+function rankingMessages() {
+    $con = conectar("msg");
+    $select = "select sender, count(*) from message group by sender order by NumeroMensajes desc;";
+    $resultado = mysqli_query($con, $select) or die(mysql_error());
+    desconectar($con);
+    return $resultado;
+}
 
 // DELETE USER
 
