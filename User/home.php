@@ -14,7 +14,7 @@ if (isset($_SESSION["user"])) {
             </head>
             <body>
                 <h1>HOME USER: <?php echo $_SESSION["user"]?></h1>
-                <a href="modificarPassword.php">Cambiar Password</a><br>
+                <a href="../modificarPassword.php">Cambiar Password</a><br>
                 <a href="send.php">Enviar mensaje</a><br>
                 <a href="messages.php">Bandeja de entrada</a><br>
                 <a href="sentMsg.php">Mensajes enviados</a><br><br>

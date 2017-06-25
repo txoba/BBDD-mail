@@ -34,7 +34,6 @@ function newUser($username, $password, $name, $surname, $type) {
     }
     desconectar($conexion);
 }
-
 function newUserAdmin($username, $password, $name, $surname, $type) {
     $conexion = conectar("msg");
     //$hash = password_hash($password, PASSWORD_DEFAULT);
@@ -48,14 +47,36 @@ function newUserAdmin($username, $password, $name, $surname, $type) {
     }
     desconectar($conexion);
 }
-
 function insertEvent($username, $type) {
     $con = conectar("msg");
     $insert = "insert into event values (null,'$username', now(),'$type')";
     if (mysqli_query($con, $insert)) {
-        echo "<p>Evento registrado </p>";
+        echo "Evento registrado";
     } else {
         echo mysqli_error($con);
+        header("refresh:1;url=registerUser.php");
+    }
+    desconectar($con);
+}
+function insertMessage($sender, $reciver, $subject, $body) {
+    $con = conectar("msg");
+    $tipo = selectUser();
+    $fila = mysqli_fetch_array($tipo);
+    extract($fila);
+    $insert = "insert into message values (null,'$sender', '$reciver' , now() , 0 , '$subject', '$body')";
+    if (mysqli_query($con, $insert)) {
+        if ($type == 0) {
+            echo "Mensaje enviado.<br>";
+            header("refresh:3;url=User/home.php");
+        } else if ($type == 1) {
+            echo "Mensaje enviado.<br>";
+            header("refresh:3;url=Admin/home_admin.php");
+        }
+    } else {
+        echo mysqli_error($con);
+        echo "<form action='send.php' method='post'>";
+            echo "<input type='submit' value='Volver'>";
+            echo "</form>";
     }
     desconectar($con);
 }
