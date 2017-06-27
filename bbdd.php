@@ -222,8 +222,8 @@ function deleteUser($name) {
 
 function updatePassword($password, $usuario) {
     $con = conectar("msg");
-    //$hash = password_hash($password, PASSWORD_DEFAULT);
-    $update = "update user set password='$password' where username='$usuario'";
+    $hash = password_hash($password, PASSWORD_DEFAULT);
+    $update = "update user set password='$hash' where username='$usuario'";
     if (mysqli_query($con, $update)) {
         echo "Password actualizada.";
         header("refresh:1;url=home.php");

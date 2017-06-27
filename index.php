@@ -22,6 +22,7 @@ if (isset($_POST["registrar"])) {
         session_start();
         $_SESSION["user"] = $username;
         $tipo = selectType($username);
+        insertEvent($_SESSION["user"], 'I');
         $_SESSION["type"] = $tipo;
         if ($tipo == 0) {
             header("refresh:1;url=home.php");

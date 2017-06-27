@@ -6,7 +6,7 @@ if (isset($_SESSION["user"])) {
         if (isset($_POST['borrar'])) {
             $user = $_POST["username"];
             deleteUser($user);
-            insertEvent($_SESSION["user"], 'X');
+            insertEvent($user, 'X');
         } else {
             echo "<form action='' method='post'>";
             echo "Seleciona el usuario a eliminar: ";
