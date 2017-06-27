@@ -18,8 +18,8 @@ function desconectar($conexion) {
 
 function newUser($username, $password, $name, $surname, $type) {
     $conexion = conectar("msg");
-    //$hash = password_hash($password, PASSWORD_DEFAULT);
-    $insert = "insert into user values('$username', '$password', '$name', '$surname', $type)";
+    $hash = password_hash($password, PASSWORD_DEFAULT);
+    $insert = "insert into user values('$username', '$hash', '$name', '$surname', $type)";
     if (mysqli_query($conexion, $insert)) {
             echo "Usuario dado de alta.<br>";
             header("refresh:1;url=index.php");
@@ -107,6 +107,20 @@ function comprobarUser($username) {
     desconectar($con);
     $num_rows = mysqli_num_rows($resultado);
     if ($num_rows == 0) {
+        return false;
+    }
+}
+function validateUser($user, $pass){
+    $con = conectar("msg");
+    $query = "select password from user where username = '$user';";
+    $resultado = mysqli_query($con, $query);
+    $filas = mysqli_num_rows($resultado);
+    desconectar($con);
+    if($filas > 0){
+        $fila = mysqli_fetch_array($resultado);
+        extract($fila);
+        return password_verify($pass, $password);
+    }else{
         return false;
     }
 }

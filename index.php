@@ -18,11 +18,7 @@ if (isset($_POST["registrar"])) {
 } else if (isset($_POST["login"])) {
     $username = $_POST["username"];
     $pass = $_POST["password"];
-    $verify = validarPassword($username);
-    $fila = mysqli_fetch_array($verify);
-    extract($fila);
-    if ($password == $pass) {
-        insertEvent($username, "I");
+    if (validateUser($username, $pass)) {
         session_start();
         $_SESSION["user"] = $username;
         $tipo = selectType($username);
