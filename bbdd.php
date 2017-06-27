@@ -34,8 +34,8 @@ function newUser($username, $password, $name, $surname, $type) {
 
 function newUserAdmin($username, $password, $name, $surname, $type) {
     $conexion = conectar("msg");
-    //$hash = password_hash($password, PASSWORD_DEFAULT);
-    $insert = "insert into user values('$username', '$password', '$name', '$surname', $type)";
+    $hash = password_hash($password, PASSWORD_DEFAULT);
+    $insert = "insert into user values('$username', '$hash', '$name', '$surname', $type)";
     if (mysqli_query($conexion, $insert)) {
         echo "Usuario dado de alta.<br>";
             header("refresh:1;url=home.php");
